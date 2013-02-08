@@ -51,6 +51,41 @@ var moneyPattern = /[^0-9.-]+/g;
 
 var traits = ["Rank", "Votes", "Rating", "Price (USD)"];
 
+var colors = {
+  "Arcade & Action": [185,56,73],
+  "Books & Reference": [37,50,75],
+  "Brain & Puzzle": [325,50,47],
+  "Business": [10,28,67],
+  "Cards & Casino": [204,70,41],
+  "Casual": [56,58,73],
+  "Comics": [28,100,52],
+  "Education": [41,75,61],
+  "Entertainment": [60,86,61],
+  "Everyone": [30,100,73],
+  "Finance": [318,65,67],
+  "Health & Fitness": [274,30,66],
+  "High Maturity": [20,49,49],
+  "Libraries & Demo": [334,80,84],
+  "Lifestyle": [185,80,45],
+  "Low Maturity": [10,30,42],
+  "Media & Video": [339,60,49],
+  "Medium Maturity": [359,60,54],
+  "Music & Audio": [271,39,57],
+  "Personalization": [1,100,79],
+  "Photography": [189,57,75],
+  "Productivity": [110,57,70],
+  "Racing": [159,121,238],
+  "Social": [198,226,255],
+  "Sports": [0,206,209],
+  "Sports Games": [84,255,159],
+  "Tools": [110,139,61],
+  "Transportation": [205,173,0],
+  "Travel & Local": [205,55,0],
+  "Weather": [142,56,142],
+
+  //NOT AN ACTUAL CATEGORY, JUST FOR THE AVERAGE LINE
+  "Average": [125,100,60]};
+
 var m = [80, 160, 200, 160],
     w = 1280 - m[1] - m[3],
     h = 800 - m[0] - m[2];
