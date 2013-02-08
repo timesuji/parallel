@@ -42,8 +42,12 @@ svg {
   </head>
   <body>
     <h2>
-      The Android market
+      500 Top-Grossing Android Apps
     </h2>
+    <br/>
+    <h3>
+      <i>λπ</i>
+    </h3>
     <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript">
 
@@ -123,7 +127,10 @@ d3.csv("top-grossing.csv", function(apps) {
       .data(apps)
     .enter().append("svg:path")
       .attr("d", path)
-      .attr("stroke", function(d) { return "hsl(" + Math.floor(Math.random() * 360) + ", 100%, 50%)"; });
+      .attr("stroke", function(d) {
+        return colors[d.Category] ?
+          "#" + colors[d.Category].map(function(d){return parseInt(d).toString(16);}).join("") :
+          "#333"; });
 
   // Add a group element for each trait.
   var g = svg.selectAll(".trait")
