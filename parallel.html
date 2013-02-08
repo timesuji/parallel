@@ -68,6 +68,11 @@ var svg = d3.select("body").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
+var foregroundCanvas = d3.select("body").append("canvas")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+    .attr("id", "foreground");
+
 d3.csv("top-grossing.csv", function(apps) {
 
   // Create a scale and brush for each trait.
@@ -82,13 +87,13 @@ d3.csv("top-grossing.csv", function(apps) {
  });
 
   // Add foreground lines.
-  foreground = svg.append("svg:g")
-      .attr("class", "foreground")
-    .selectAll("path")
+  // foreground = svg.append("svg:g")
+  //     .attr("class", "foreground")
+  foregroundCanvas.selectAll("path")
       .data(apps)
-    .enter().append("svg:path")
-      .attr("d", path)
-      .attr("stroke", function(d) { return "hsl(" + Math.floor(Math.random() * 360) + ", 100%, 50%)"; });
+    .enter().append("path")
+      .attr("d", curvedPath)
+      .attr("stroke", function(d) { return randomColor(); });
 
   // Add a group element for each trait.
   var g = svg.selectAll(".trait")
@@ -127,19 +132,44 @@ d3.csv("top-grossing.csv", function(apps) {
     x.range()[i] = d3.event.x;
     traits.sort(function(a, b) { return x(a) - x(b); });
     g.attr("transform", function(d) { return "translate(" + x(d) + ")"; });
-    foreground.attr("d", path);
+    foreground.attr("d", curvedPath);
   }
 
   function dragend(d) {
     x.domain(traits).rangePoints([0, w]);
     var t = d3.transition().duration(500);
     t.selectAll(".trait").attr("transform", function(d) { return "translate(" + x(d) + ")"; });
-    t.selectAll(".foreground path").attr("d", path);
+    t.selectAll("#foreground path").attr("d", curvedPath);
   }
 });
 
+function curvedPath(d) {
+  return path(d, document.getElementById('foreground').getContext('2d'), randomColor());
+}
+
 // Returns the path for a given data point.
-function path(d) {
+// function path(d, ctx, color) {
+//   if (color) ctx.strokeStyle = color;
+//   var x_n = 0;
+//       y_n = 0;   // left edge
+
+//   x_orig = -1
+//   ctx.beginPath();
+//   traits.map(function(p) {
+//     x_n = x[p],
+//     y_n = y[p](d[p]);
+
+//     if (x_orig != -1) {
+//       ctx.bezierCurveTo(x_orig + 65, y_orig, x_n - 65,y_n, x_n, y_n);
+//     } else {
+//       ctx.moveTo(x_n, y_n);
+//     }
+//     x_orig = x
+//     y_orig = y
+//   })
+//   ctx.stroke();
+// }
+function path(d, ctx, color) {
   return line(traits.map(function(p) {
     return [x(p), y[p](numerize(d, p))]; })); 
 }
@@ -157,6 +187,10 @@ function brush() {
 
 function numerize(d, p) {
   return parseFloat(d[p].replace(moneyPattern, ''));
+}
+
+function randomColor() {
+  return "hsl(" + Math.floor(Math.random() * 360) + ", 100%, 50%)";
 }
 
     </script>
